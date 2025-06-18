@@ -10,10 +10,18 @@ const { appSchema } = require("./routes/auth.js");
 const { profileRouter } = require("./routes/profile.js");
 const requestRouter = require("./routes/request.js");
 const { userRouter } = require("./routes/user.js");
+var cors = require("cors");
 
 //middlewear
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
+
 app.use("/", appSchema);
 app.use("/", profileRouter);
 app.use("/", requestRouter);

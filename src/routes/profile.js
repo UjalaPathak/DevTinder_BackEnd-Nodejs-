@@ -8,12 +8,12 @@ const {
 const profileRouter = express.Router();
 //singe Profile check
 profileRouter
-  .get("/profile", userAuth, async (req, res) => {
+  .get("/profile/view", userAuth, async (req, res) => {
     try {
       const user = req.user;
       res.send(user);
     } catch (err) {
-      res.status(400).send("Error:" + err.message);
+      res.status(401).send("Error:" + err.message);
     }
   })
   .patch("/profile/edit", userAuth, async (req, res) => {
