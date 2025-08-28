@@ -8,6 +8,8 @@ const validateProfileData = (req) => {
     "description",
     "skills",
     "photoUrl",
+    "age",
+    "gender",
   ];
 
   const isValidtoUpdate = Object.keys(req.body).every((field) =>
