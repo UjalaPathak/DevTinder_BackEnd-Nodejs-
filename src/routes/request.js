@@ -67,15 +67,12 @@ requestRouter.post(
   async (req, res) => {
     try {
       const logedInuser = req.user;
-      console.log("6823527778d72009918025f3", logedInuser);
-
       //a to b
       //loggedInuser == toUserId
       //status should be interested to reject or accept
       //request Id should be valid
       const { status, requestId } = req.params;
-      console.log("68011be326b7fe5383e6a0cd", requestId);
-
+      console.log("req.params", req.params);
       const allowedStatus = ["rejected", "accepted"];
       if (!allowedStatus.includes(status)) {
         return res.status(400).json({ message: "status not allowed" });
@@ -87,6 +84,8 @@ requestRouter.post(
         toUserId: logedInuser._id,
         status: "interested",
       });
+
+      console.log("connectionRequest", connectionRequest);
 
       if (!connectionRequest) {
         return res

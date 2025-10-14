@@ -17,6 +17,7 @@ profileRouter
     }
   })
   .patch("/profile/edit", userAuth, async (req, res) => {
+
     try {
       if (!validateProfileData(req)) {
         throw new Error("Invalid Edit request");
@@ -27,12 +28,28 @@ profileRouter
         loggedInuser[key] = req.body[key];
       });
 
+      if (req.body.age) {
+        const { age } = req.body;
+        const today = new Date();
+        const birthdate = new Date(age);
+        if (birthdate > today) {
+          return res
+            .status(400)
+            .send(
+              "Please enter a valid date of birth. It cannot be in the future."
+            );
+        }
+        const years = today.getFullYear() - birthdate.getFullYear();
+        loggedInuser.age = years;
+      }
+
       await loggedInuser.save();
       res.send({
         message: `${loggedInuser.firstName}, Updated Successfully`,
         resources: loggedInuser,
       });
     } catch (err) {
+      console.log(err);
       res.status(400).send("Error: " + err.message);
     }
   })
