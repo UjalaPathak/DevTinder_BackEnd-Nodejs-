@@ -46,10 +46,30 @@ appSchema
         email,
         password: passwordHash,
       });
-      await user.save();
-      res.status(201).send(user);
+      const savedUser = await user.save();
+      const token = jwt.sign(
+        { _id: savedUser._id }, // use the _id from saved user
+        "DEV@TINDER345", // secret key
+        { expiresIn: "7d" } // token validity
+      );
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 8 * 3600000),
+      });
+      res
+        .status(201)
+        .json({ message: "User Added Successfully", data: savedUser });
     } catch (err) {
-      res.status(400).send("ERROR :" + err.message);
+      // Handle MongoDB duplicate key error
+      if (err.code === 11000 && err.keyPattern?.email) {
+        return res.status(400).json({
+          message: "Email already exists. Please use a different one.",
+        });
+      }
+
+      // Handle validation or other errors
+      return res.status(500).json({
+        message: "An unexpected error occurred. Please try again later.",
+      });
     }
   })
   .post("/logout", async (req, res) => {

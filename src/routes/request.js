@@ -1,7 +1,7 @@
 const express = require("express");
 const { userAuth } = require("../middlewares/auth");
 const requestRouter = express.Router();
-const ConnectionRequest = require("../models/connectionRequest");
+const ConnectionRequestModel = require("../models/connectionRequest");
 const User = require("../models/user");
 
 requestRouter.post(
@@ -29,7 +29,7 @@ requestRouter.post(
           .json({ message: "Invalid status type: " + status });
       }
 
-      const existingRequest = await ConnectionRequest.findOne({
+      const existingRequest = await ConnectionRequestModel.findOne({
         $or: [
           { fromUserId, toUserId },
           { fromUserId: toUserId, toUserId: fromUserId },
@@ -42,7 +42,7 @@ requestRouter.post(
           .json({ message: "Connection Request allready exist !" });
       }
 
-      const connectionRequest = new ConnectionRequest({
+      const connectionRequest = new ConnectionRequestModel({
         fromUserId,
         toUserId,
         status,
@@ -79,7 +79,7 @@ requestRouter.post(
       }
 
       //b to a
-      const connectionRequest = await ConnectionRequest.findOne({
+      const connectionRequest = await ConnectionRequestModel.findOne({
         _id: requestId,
         toUserId: logedInuser._id,
         status: "interested",
