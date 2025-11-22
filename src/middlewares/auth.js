@@ -9,7 +9,7 @@ const userAuth = async (req, res, next) => {
       return res.status(401).send("Please login");
     }
 
-    const isTokenValid = await jwt.verify(token, "DEV@TINDER345");
+    const isTokenValid = await jwt.verify(token,process.env.JWT_TOKEN);
 
     const { _id } = isTokenValid;
     const user = await User.findById({ _id: _id });

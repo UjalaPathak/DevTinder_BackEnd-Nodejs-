@@ -60,8 +60,8 @@ app.use("/", userRouter);
 connectDB()
   .then(() => {
     console.log("Database is connected!");
-    app.listen(7777, () => {
-      console.log("listen at port 7777");
+    app.listen(process.env.PORT, () => {
+      console.log("listen at port");
     });
   })
   .catch(() => {

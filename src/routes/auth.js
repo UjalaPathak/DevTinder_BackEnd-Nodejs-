@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const { validateSignuData } = require("../utils/validateSignup");
 const saltRounds = 10;
 
+require("dotenv").config();
+
 appSchema
   .post("/login", async (req, res) => {
     try {
@@ -21,7 +23,7 @@ appSchema
         throw new Error("Invalid Credential");
       }
       //create token
-      const token = jwt.sign({ _id: user._id }, "DEV@TINDER345", {
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_TOKEN, {
         expiresIn: "7d",
       });
 
@@ -49,7 +51,7 @@ appSchema
       const savedUser = await user.save();
       const token = jwt.sign(
         { _id: savedUser._id }, // use the _id from saved user
-        "DEV@TINDER345", // secret key
+        process.env.JWT_TOKEN, // secret key
         { expiresIn: "7d" } // token validity
       );
       res.cookie("token", token, {
